@@ -84,6 +84,21 @@ public class AsynchronousClient
         }
     }
 
+
+    private static void WriteToServer()
+    {
+        string userInput = string.Empty;
+        while(userInput != "q")
+        {
+            // Convert the string data to byte data using ASCII encoding.  
+            byte[] byteData = Encoding.ASCII.GetBytes(userInput + "<EOF>");
+
+            // Begin sending the data to the remote device.  
+            client.Send(byteData);
+        }
+    }
+
+
     private static void Communicate()
     {
         // Connect to a remote device.  
@@ -91,8 +106,10 @@ public class AsynchronousClient
         {
             while (true)
             {
+                //String message = "OMER";
                 String message = Console.ReadLine();
-                if (message == "quit")
+
+                if (message == "q")
                 {
                     break;
                 }
@@ -100,8 +117,8 @@ public class AsynchronousClient
                 Send(client, message + "<EOF>");
                 sendDone.WaitOne();
                 // Receive the response from the remote device.  
-                Receive(client);
-                receiveDone.WaitOne();
+                //Receive(client);
+                //receiveDone.WaitOne();
                 // Write the response to the console.  
                 Console.WriteLine("Response received : {0}", response);
 
@@ -197,6 +214,7 @@ public class AsynchronousClient
                 // Get the rest of the data.  
                 client.BeginReceive(state.buffer, 0, StateObject.BufferSize, 0,
                     new AsyncCallback(ReceiveCallback), state);
+                receiveDone.Set();
             }
             else
             {
