@@ -5,6 +5,7 @@ using System.Threading;
 using System.Text;
 using System.Runtime.CompilerServices;
 
+
 // State object for receiving data from remote device.  
 public class StateObject
 {
