@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Text;
+using System.Runtime.CompilerServices;
 
 // State object for receiving data from remote device.  
 public class StateObject
@@ -90,6 +91,7 @@ public class AsynchronousClient
         string userInput = string.Empty;
         while(userInput != "q")
         {
+            userInput = Console.ReadLine();
             // Convert the string data to byte data using ASCII encoding.  
             byte[] byteData = Encoding.ASCII.GetBytes(userInput + "<EOF>");
 
@@ -99,35 +101,27 @@ public class AsynchronousClient
     }
 
 
+
+
+    private static void ListenToServer()
+    {
+        byte[] serverMessage = new byte[1024];
+        int bytesRead;
+        while((bytesRead = client.Receive(serverMessage)) > 0)
+        {            
+            Console.WriteLine(Encoding.ASCII.GetString(serverMessage, 0, bytesRead));
+        }
+    }
+
+
     private static void Communicate()
     {
-        // Connect to a remote device.  
-        try
-        {
-            while (true)
-            {
-                //String message = "OMER";
-                String message = Console.ReadLine();
-
-                if (message == "q")
-                {
-                    break;
-                }
-                // Send test data to the remote device.  
-                Send(client, message + "<EOF>");
-                sendDone.WaitOne();
-                // Receive the response from the remote device.  
-                //Receive(client);
-                //receiveDone.WaitOne();
-                // Write the response to the console.  
-                Console.WriteLine("Response received : {0}", response);
-
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.ToString());
-        }
+        Thread listen = new Thread(ListenToServer);
+        Thread write = new Thread(WriteToServer);
+        listen.Start();
+        write.Start();
+        listen.Join();
+        write.Join();
     }
 
 
