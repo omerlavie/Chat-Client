@@ -45,9 +45,9 @@ public class AsynchronousClient
             // Establish the remote endpoint for the socket.  
             // The name of the
             // remote device is "host.contoso.com".  
-            IPHostEntry ipHostInfo = Dns.GetHostEntry("127.0.0.1");
-            IPAddress ipAddress = ipHostInfo.AddressList[0];
-            IPEndPoint remoteEP = new IPEndPoint(ipAddress, port);
+            IPHostEntry ipHostInfo = Dns.GetHostEntry("192.115.29.180");
+            IPAddress ipAddress    = ipHostInfo.AddressList[0];
+            IPEndPoint remoteEP    = new IPEndPoint(ipAddress, port);
 
             // Create a TCP/IP socket.  
             client = new Socket(ipAddress.AddressFamily,
@@ -94,7 +94,7 @@ public class AsynchronousClient
         {
             userInput = Console.ReadLine();
             // Convert the string data to byte data using ASCII encoding.  
-            byte[] byteData = Encoding.ASCII.GetBytes(userInput + "<EOF>");
+            byte[] byteData = Encoding.ASCII.GetBytes(userInput);
 
             // Begin sending the data to the remote device.  
             client.Send(byteData);
