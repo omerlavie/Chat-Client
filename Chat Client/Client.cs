@@ -6,6 +6,9 @@ using System.Text;
 using System.Runtime.CompilerServices;
 
 
+// Testing some new features.
+
+
 // State object for receiving data from remote device.  
 public class StateObject
 {
